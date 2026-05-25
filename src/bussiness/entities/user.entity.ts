@@ -1,17 +1,16 @@
 import { EditUserInput } from '../ports/input/services/dtos/input/edit-user.input';
 import { LoginInput } from '../ports/input/services/dtos/input/login.input';
+import { Alert } from './alert.entity';
 import { IEntity } from './i.entity';
-import { Measurement } from './measurement.entity';
-import { Station } from './station.entity';
 
 export class User extends IEntity<EditUserInput> {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  stations: Array<Station> = [];
-  subscriptions: Array<Station> = [];
-  alerts: Array<Measurement> = [];
+  stations: Array<string> = [];
+  subscriptions: Array<string> = [];
+  alerts: Array<Alert> = [];
 
   constructor(id: string | null);
   constructor(id: string, firstName: string, lastName: string, email: string, password: string);
@@ -36,19 +35,19 @@ export class User extends IEntity<EditUserInput> {
     return new LoginInput(this.id, this.email);
   }
 
-  addStation(station: Station) {
+  addStation(station: string) {
     this.stations = [...this.stations, station];
   }
 
   removeStation(id: string) {
-    this.stations = this.stations?.filter((station) => station?.id !== id) ?? [];
+    this.stations = this.stations?.filter((station) => station !== id) ?? [];
   }
 
-  subscribe(station: Station) {
+  subscribe(station: string) {
     this.subscriptions = [...this.subscriptions, station];
   }
 
-  notifyAlert(alert: Measurement): void {
+  notifyAlert(alert: Alert): void {
     this.alerts = [...this.alerts, alert];
   }
 }

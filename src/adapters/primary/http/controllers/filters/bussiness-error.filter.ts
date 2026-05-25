@@ -8,9 +8,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
+import { AlertNonEditableError } from 'src/bussiness/errors/alert-non-editable.error';
+import { AlertNotFoundError } from 'src/bussiness/errors/alert-not-found.error';
 import { BussinessError } from 'src/bussiness/errors/bussiness.error';
-import { MeasurementNotFoundError } from 'src/bussiness/errors/measurement-not-found.error';
-import { StationNotFoundError } from 'src/bussiness/errors/station-not-found.error';
 import { UserAlreadyExistsError } from 'src/bussiness/errors/user-already-exists.error';
 import { UserNotFoundError } from 'src/bussiness/errors/user-not-found.error';
 
@@ -25,9 +25,9 @@ export class BussinessExceptionFilter implements ExceptionFilter {
 
   catch(exception: BussinessError, host: ArgumentsHost) {
     try {
-      if (exception instanceof MeasurementNotFoundError) throw new NotFoundException(exception.message);
-      if (exception instanceof StationNotFoundError) throw new NotFoundException(exception.message);
+      if (exception instanceof AlertNotFoundError) throw new NotFoundException(exception.message);
       if (exception instanceof UserNotFoundError) throw new NotFoundException(exception.message);
+      if (exception instanceof AlertNonEditableError) throw new BadRequestException(exception.message);
       if (exception instanceof UserAlreadyExistsError) throw new BadRequestException(exception.message);
       throw new InternalServerErrorException();
     } catch (error) {

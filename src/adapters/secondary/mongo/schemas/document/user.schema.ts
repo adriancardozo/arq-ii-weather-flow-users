@@ -1,6 +1,5 @@
 import { Schema } from 'mongoose';
-import { Station } from 'src/bussiness/entities/station.entity';
-import { Measurement } from '../object/measurement-object.schema';
+import { Alert } from 'src/bussiness/entities/alert.entity';
 
 export const UserSchema = new Schema(
   {
@@ -8,9 +7,9 @@ export const UserSchema = new Schema(
     lastName: String,
     email: { type: String, unique: true },
     password: String,
-    stations: [{ type: Schema.Types.ObjectId, ref: Station.name }],
-    subscriptions: [{ type: Schema.Types.ObjectId, ref: Station.name }],
-    alerts: [{ type: Schema.Types.ObjectId, ref: Measurement.name }],
+    stations: [{ type: String }],
+    subscriptions: [{ type: String }],
+    alerts: [{ type: Schema.Types.ObjectId, ref: Alert.name }],
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );

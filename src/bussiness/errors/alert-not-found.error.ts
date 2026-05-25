@@ -1,7 +1,7 @@
 import { BussinessError } from './bussiness.error';
 
-export class StationNotFoundError extends BussinessError {
+export class AlertNotFoundError extends BussinessError {
   constructor(message?: string, options?: ErrorOptions) {
-    super(message ?? 'Estación no encontrada', options);
+    super(message ?? 'Alerta no encontrada', options);
   }
 }

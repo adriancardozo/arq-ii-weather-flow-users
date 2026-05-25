@@ -1,15 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Measurement } from 'src/bussiness/entities/measurement.entity';
+import { Alert } from 'src/bussiness/entities/alert.entity';
 
 export class AlertResponse {
   @ApiProperty()
   id: string;
   @ApiProperty()
   datetime: string;
-  @ApiProperty()
-  alert: boolean;
-  @ApiProperty({ enum: ['Ninguna', 'Calor extremo', 'Helada', 'Tormenta', 'Humedad crítica'] })
-  alert_type: 'Ninguna' | 'Calor extremo' | 'Helada' | 'Tormenta' | 'Humedad crítica';
+  @ApiProperty({ enum: ['Calor extremo', 'Helada', 'Tormenta', 'Humedad crítica'] })
+  alert_type: 'Calor extremo' | 'Helada' | 'Tormenta' | 'Humedad crítica';
   @ApiProperty()
   pressure: number;
   @ApiProperty()
@@ -17,13 +15,12 @@ export class AlertResponse {
   @ApiProperty()
   humidity: number;
 
-  constructor(measurement: Measurement) {
-    this.id = measurement.id!;
-    this.datetime = measurement.datetime.toISOString();
-    this.alert = measurement.alert;
-    this.alert_type = measurement.alertType;
-    this.pressure = measurement.pressure;
-    this.temperature = measurement.temperature;
-    this.humidity = measurement.humidity;
+  constructor(alert: Alert) {
+    this.id = alert.id!;
+    this.datetime = alert.datetime.toISOString();
+    this.alert_type = alert.alertType;
+    this.pressure = alert.pressure;
+    this.temperature = alert.temperature;
+    this.humidity = alert.humidity;
   }
 }
