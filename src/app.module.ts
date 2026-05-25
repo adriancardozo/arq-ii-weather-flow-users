@@ -1,20 +1,10 @@
 import { Logger, Module } from '@nestjs/common';
 import { AppController } from './adapters/primary/http/controllers/app.controller';
 import { IUserService } from './bussiness/ports/input/services/i-user.service';
-import { IStationService } from './bussiness/ports/input/services/i-station.service';
-import { IMeasurementService } from './bussiness/ports/input/services/i-measurement.service';
-import { MongoMeasurementRepository } from './adapters/secondary/mongo/repositories/mongo-measurement.repository';
-import { MongoStationRepository } from './adapters/secondary/mongo/repositories/mongo-station.repository';
 import { MongoUserRepository } from './adapters/secondary/mongo/repositories/mongo-user.repository';
-import { IMeasurementRepository } from './bussiness/ports/output/repositories/i-measurement.repository';
-import { IStationRepository } from './bussiness/ports/output/repositories/i-station.repository';
 import { IUserRepository } from './bussiness/ports/output/repositories/i-user.repository';
-import { MeasurementService } from './bussiness/services/measurement.service';
-import { StationService } from './bussiness/services/station.service';
 import { UserService } from './bussiness/services/user.service';
 import { AuthController } from './adapters/primary/http/controllers/auth.controller';
-import { MeasurementController } from './adapters/primary/http/controllers/measurement.controller';
-import { StationController } from './adapters/primary/http/controllers/station.controller';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './infrastructure/configuration/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -31,11 +21,10 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './adapters/primary/http/controllers/strategies/local.strategy';
 import { JwtStrategy } from './adapters/primary/http/controllers/strategies/jwt.strategy';
 import { UserController } from './adapters/primary/http/controllers/user.controller';
-import { Station } from './bussiness/entities/station.entity';
-import { StationSchema } from './adapters/secondary/mongo/schemas/document/station.schema';
-import { Measurement } from './bussiness/entities/measurement.entity';
-import { MeasurementSchema } from './adapters/secondary/mongo/schemas/document/measurement.schema';
-import { SearchController } from './adapters/primary/http/controllers/search.controller';
+import { Alert } from './bussiness/entities/alert.entity';
+import { AlertSchema } from './adapters/secondary/mongo/schemas/document/alert.schema';
+import { MongoAlertRepository } from './adapters/secondary/mongo/repositories/mongo-alert.repository';
+import { IAlertRepository } from './bussiness/ports/output/repositories/i-alert.repository';
 
 const { mongo, jwt } = configuration();
 
@@ -45,26 +34,14 @@ const { mongo, jwt } = configuration();
     MongooseModule.forRoot(mongo.uri),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
-      { name: Station.name, schema: StationSchema },
-      { name: Measurement.name, schema: MeasurementSchema },
+      { name: Alert.name, schema: AlertSchema },
     ]),
     JwtModule.register({ global: true, secret: jwt.secret, signOptions: { expiresIn: '10d' } }),
     PassportModule,
   ],
-  controllers: [
-    AppController,
-    AuthController,
-    MeasurementController,
-    StationController,
-    UserController,
-    SearchController,
-  ],
+  controllers: [AppController, AuthController, UserController],
   providers: [
     Logger,
-    MeasurementService,
-    { provide: IMeasurementService, useExisting: MeasurementService },
-    StationService,
-    { provide: IStationService, useExisting: StationService },
     AuthService,
     { provide: IAuthService, useExisting: AuthService },
     UserService,
@@ -73,10 +50,8 @@ const { mongo, jwt } = configuration();
     { provide: IHashService, useExisting: BcryptHashService },
     MongoTransactionService,
     { provide: ITransactionService, useExisting: MongoTransactionService },
-    MongoMeasurementRepository,
-    { provide: IMeasurementRepository, useExisting: MongoMeasurementRepository },
-    MongoStationRepository,
-    { provide: IStationRepository, useExisting: MongoStationRepository },
+    MongoAlertRepository,
+    { provide: IAlertRepository, useExisting: MongoAlertRepository },
     MongoUserRepository,
     { provide: IUserRepository, useExisting: MongoUserRepository },
     LocalStrategy,
