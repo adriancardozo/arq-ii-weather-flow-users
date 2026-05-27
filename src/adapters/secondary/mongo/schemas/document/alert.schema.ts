@@ -11,6 +11,7 @@ export const AlertSchema = new Schema(
     pressure: Number,
     temperature: Number,
     humidity: Number,
+    measurement: { type: String },
     station: { type: String },
     users: [{ type: Schema.Types.ObjectId, ref: User.name }],
   },

@@ -21,7 +21,7 @@ export class MongoUserRepository
       UserNotFoundError,
       UserModel,
       transactionService,
-      ['stations', 'subscriptions', 'alerts'],
+      ['alerts'],
       UserAlreadyExistsError,
     );
   }

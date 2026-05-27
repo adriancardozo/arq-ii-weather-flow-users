@@ -9,6 +9,7 @@ export class Alert extends IEntity<never> {
   temperature: number;
   humidity: number;
   station: string;
+  measurement: string;
   users: Array<User>;
 
   constructor(id: string);
@@ -18,6 +19,7 @@ export class Alert extends IEntity<never> {
     pressure: number,
     temperature: number,
     humidity: number,
+    measurement: string,
     station: string,
     users: Array<User>,
     datetime?: Date,
@@ -28,6 +30,7 @@ export class Alert extends IEntity<never> {
     pressure?: number,
     temperature?: number,
     humidity?: number,
+    measurement?: string,
     station?: string,
     users?: Array<User>,
     datetime?: Date,
@@ -39,6 +42,7 @@ export class Alert extends IEntity<never> {
       pressure !== undefined &&
       temperature !== undefined &&
       humidity !== undefined &&
+      measurement !== undefined &&
       station !== undefined &&
       users !== undefined
     ) {
@@ -46,6 +50,7 @@ export class Alert extends IEntity<never> {
       this.pressure = pressure;
       this.temperature = temperature;
       this.humidity = humidity;
+      this.measurement = measurement;
       this.station = station;
       this.users = users;
       if (datetime) this.datetime = datetime;
