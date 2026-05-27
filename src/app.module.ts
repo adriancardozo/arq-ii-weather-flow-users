@@ -25,8 +25,13 @@ import { Alert } from './bussiness/entities/alert.entity';
 import { AlertSchema } from './adapters/secondary/mongo/schemas/document/alert.schema';
 import { MongoAlertRepository } from './adapters/secondary/mongo/repositories/mongo-alert.repository';
 import { IAlertRepository } from './bussiness/ports/output/repositories/i-alert.repository';
+import { ServiceBusAdministrationClient, ServiceBusClient } from '@azure/service-bus';
+import { ServiceBusProcessorManager } from './adapters/primary/queue/helpers/service-bus-processor-manager.helper';
+import { IAlertService } from './bussiness/ports/input/services/i-alert.service';
+import { AlertService } from './bussiness/services/alert.service';
+import { AlertProcessor } from './adapters/primary/queue/processors/alert.processor';
 
-const { mongo, jwt } = configuration();
+const { mongo, jwt, service_bus } = configuration();
 
 @Module({
   imports: [
@@ -41,11 +46,20 @@ const { mongo, jwt } = configuration();
   ],
   controllers: [AppController, AuthController, UserController],
   providers: [
+    { provide: ServiceBusClient, useValue: new ServiceBusClient(service_bus.connection_string) },
+    {
+      provide: ServiceBusAdministrationClient,
+      useValue: new ServiceBusAdministrationClient(service_bus.connection_string),
+    },
+    ServiceBusProcessorManager,
     Logger,
+    AlertProcessor,
     AuthService,
     { provide: IAuthService, useExisting: AuthService },
     UserService,
     { provide: IUserService, useExisting: UserService },
+    AlertService,
+    { provide: IAlertService, useExisting: AlertService },
     BcryptHashService,
     { provide: IHashService, useExisting: BcryptHashService },
     MongoTransactionService,
