@@ -6,7 +6,7 @@ const service_bus_connection_string = process.env.SERVICE_BUS_CONNECTION_STRING!
 
 const emulator_string = 'UseDevelopmentEmulator=true';
 
-const service_bus_emulated = service_bus_connection_string.includes(emulator_string);
+const service_bus_emulated = (service_bus_connection_string ?? '').includes(emulator_string);
 
 const configuration = {
   app: {
