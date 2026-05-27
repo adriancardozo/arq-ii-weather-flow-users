@@ -30,6 +30,9 @@ import { ServiceBusProcessorManager } from './adapters/primary/queue/helpers/ser
 import { IAlertService } from './bussiness/ports/input/services/i-alert.service';
 import { AlertService } from './bussiness/services/alert.service';
 import { AlertProcessor } from './adapters/primary/queue/processors/alert.processor';
+import { UserStationController } from './adapters/primary/http/controllers/user-station.controller';
+import { UserStationService } from './bussiness/services/user-station.service';
+import { IUserStationService } from './bussiness/ports/input/services/i-user-station.service';
 
 const { mongo, jwt, service_bus } = configuration();
 
@@ -44,7 +47,7 @@ const { mongo, jwt, service_bus } = configuration();
     JwtModule.register({ global: true, secret: jwt.secret, signOptions: { expiresIn: '10d' } }),
     PassportModule,
   ],
-  controllers: [AppController, AuthController, UserController],
+  controllers: [AppController, AuthController, UserController, UserStationController],
   providers: [
     { provide: ServiceBusClient, useValue: new ServiceBusClient(service_bus.connection_string) },
     {
@@ -60,6 +63,8 @@ const { mongo, jwt, service_bus } = configuration();
     { provide: IUserService, useExisting: UserService },
     AlertService,
     { provide: IAlertService, useExisting: AlertService },
+    UserStationService,
+    { provide: IUserStationService, useExisting: UserStationService },
     BcryptHashService,
     { provide: IHashService, useExisting: BcryptHashService },
     MongoTransactionService,
