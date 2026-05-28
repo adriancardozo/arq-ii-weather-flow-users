@@ -47,4 +47,4 @@ jobs:
           ref: ${{ steps.branch.outputs.pull_request_branch_name }}
           path: arq-ii-weather-flow-weather
       - run: docker compose -f 'arq-ii-weather-flow-users/docker-compose.e2e.yml' up -d
-      - run: npm run test:e2e
+      - run: cd arq-ii-weather-flow-users && npm run test:e2e
