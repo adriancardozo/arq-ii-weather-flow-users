@@ -28,3 +28,23 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
+      - uses: actions/checkout@v4
+        name: Checkout users
+        with:
+          path: arq-ii-weather-flow-users
+      - uses: actions/checkout@v4
+        name: Checkout weather
+        if: ${{ github.event_name == 'push' }}
+        with:
+          repository: adriancardozo/arq-ii-weather-flow-weather
+          ref: ${{ steps.branch.outputs.push_branch_name }}
+          path: arq-ii-weather-flow-weather
+      - uses: actions/checkout@v4
+        name: Checkout arq-ii-weather-flow-weather
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          repository: adriancardozo/arq-ii-weather-flow-weather
+          ref: ${{ steps.branch.outputs.pull_request_branch_name }}
+          path: arq-ii-weather-flow-weather
+      - run: docker compose -f 'arq-ii-weather-flow-users/docker-compose.e2e.yml' up -d
+      - run: npm run test:e2e
