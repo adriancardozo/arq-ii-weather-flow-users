@@ -1,6 +1,13 @@
+import { KeyvRedisOptions } from '@keyv/redis';
 import dotenv from 'dotenv';
 
 dotenv.config({});
+
+const cache_disabled = process.env.CACHE_DISABLED ? process.env.CACHE_DISABLED === 'true' : false;
+
+function ttl(ttl: number): number {
+  return cache_disabled ? -1 : ttl;
+}
 
 const service_bus_connection_string = process.env.SERVICE_BUS_CONNECTION_STRING!;
 
@@ -23,6 +30,14 @@ const configuration = {
   mongo: { uri: process.env.MONGO_URI! },
   jwt: { secret: process.env.JWT_SECRET! },
   service_bus: { connection_string: service_bus_connection_string, emulated: service_bus_emulated },
+  redis: {
+    url: process.env.REDIS_CACHE_URL,
+    options: { connectionTimeout: process.env.REDIS_CACHE_CONNECTION_TIMEOUT ?? 2000 } as KeyvRedisOptions,
+  },
+  cache: {
+    disabled: cache_disabled,
+    ttl: { average_day: ttl(60 * 60 * 1000), average_week: ttl(24 * 60 * 60 * 1000) },
+  },
 };
 
 export type Configuration = typeof configuration;
