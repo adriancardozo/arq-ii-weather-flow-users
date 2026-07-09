@@ -38,6 +38,9 @@ DNS_SERVERS=8.8.8.8,4.4.4.4
 JWT_SECRET=<jwt_secret (e.g. "Secret")>
 SERVICE_BUS_CONNECTION_STRING=<service_bus_connection_string>
 PORT=3000
+REDIS_CACHE_URL=<redis_cache_url (optional)>
+REDIS_CACHE_CONNECTION_TIMEOUT=<redis_cache_connection_timeout (default: 2000)>
+CACHE_DISABLED=<cache_disabled (default: false)>
 ```
 
 Start project
@@ -66,6 +69,9 @@ DNS_SERVERS=8.8.8.8,4.4.4.4
 JWT_SECRET=<jwt_secret (e.g. "Secret")>
 SERVICE_BUS_CONNECTION_STRING=<service_bus_connection_string>
 PORT=3000
+REDIS_CACHE_URL=<redis_cache_url (optional)>
+REDIS_CACHE_CONNECTION_TIMEOUT=<redis_cache_connection_timeout (default: 2000)>
+CACHE_DISABLED=<cache_disabled (default: false)>
 ```
 
 Create a container from this image

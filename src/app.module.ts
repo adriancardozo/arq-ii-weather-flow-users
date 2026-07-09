@@ -33,8 +33,10 @@ import { AlertProcessor } from './adapters/primary/queue/processors/alert.proces
 import { UserStationController } from './adapters/primary/http/controllers/user-station.controller';
 import { UserStationService } from './bussiness/services/user-station.service';
 import { IUserStationService } from './bussiness/ports/input/services/i-user-station.service';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Keyv } from 'keyv';
 
-const { mongo, jwt, service_bus } = configuration();
+const { mongo, jwt, service_bus, redis, cache } = configuration();
 
 @Module({
   imports: [
@@ -46,6 +48,13 @@ const { mongo, jwt, service_bus } = configuration();
     ]),
     JwtModule.register({ global: true, secret: jwt.secret, signOptions: { expiresIn: '10d' } }),
     PassportModule,
+    CacheModule.registerAsync({
+      useFactory: async () => {
+        if (cache.disabled) return { stores: [], ttl: -1 };
+        const { default: KeyvRedis } = await import('@keyv/redis');
+        return { stores: [new Keyv(), ...(redis.url ? [new KeyvRedis(redis.url, redis.options)] : [])] };
+      },
+    }),
   ],
   controllers: [AppController, AuthController, UserController, UserStationController],
   providers: [
