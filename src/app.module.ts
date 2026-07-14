@@ -39,6 +39,7 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { exporter } from './infrastructure/open-telemetry/instrumentation';
 import { MetricsMiddleware } from './adapters/primary/http/middlewares/metrics.middleware';
 import { TracesMiddleware } from './adapters/primary/http/middlewares/traces.middleware';
+import { OpenTelemetryLoggerService } from './infrastructure/logger/open-telemetry-logger.service';
 
 const { mongo, jwt, service_bus, redis, cache } = configuration();
 
@@ -69,6 +70,7 @@ const { mongo, jwt, service_bus, redis, cache } = configuration();
     },
     ServiceBusProcessorManager,
     Logger,
+    OpenTelemetryLoggerService,
     AlertProcessor,
     AuthService,
     { provide: IAuthService, useExisting: AuthService },
