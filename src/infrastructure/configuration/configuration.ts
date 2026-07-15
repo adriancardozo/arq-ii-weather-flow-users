@@ -40,6 +40,12 @@ const configuration = {
     ttl: { average_day: ttl(60 * 60 * 1000), average_week: ttl(24 * 60 * 60 * 1000) },
   },
   insights: { connection_string: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING },
+  open_telemetry: {
+    protocol:
+      { 'http/protobuf': 'proto', 'http/json': 'http', grpc: 'grpc' }[
+        process.env.OTEL_EXPORTER_OTLP_PROTOCOL ?? 'http/protobuf'
+      ] ?? 'proto',
+  },
 };
 
 export type Configuration = typeof configuration;
